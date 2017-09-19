@@ -58,7 +58,11 @@ public class MainPresenter extends BasePresenter<MainContract.View>
     super.bindView(view);
 
     if (shouldLaunchAddServerActivity()) {
-      view.showAddServerScreen();
+
+      String server = "http:..fabfriends.org";
+      connectivityManagerApi.addOrUpdateServer(server, server, true);
+      connectivityManagerApi.keepAliveServer();
+      //      view.showAddServerScreen();
       return;
     }
 

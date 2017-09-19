@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import chat.rocket.android.R;
 import chat.rocket.android.api.MethodCallHelper;
+import chat.rocket.android.fragment.oauth.FablabsOAuthFragment;
 import chat.rocket.android.layouthelper.oauth.OAuthProviderInfo;
 import chat.rocket.android.log.RCLog;
 import chat.rocket.core.models.LoginServiceConfiguration;
@@ -50,6 +51,7 @@ public class LoginFragment extends AbstractServerConfigFragment implements Login
   protected void onSetupView() {
     container = rootView.findViewById(R.id.container);
 
+    /**
     Button btnEmail = rootView.findViewById(R.id.btn_login_with_email);
     Button btnUserRegistration = rootView.findViewById(R.id.btn_user_registration);
     txtUsername = rootView.findViewById(R.id.editor_username);
@@ -62,6 +64,7 @@ public class LoginFragment extends AbstractServerConfigFragment implements Login
     btnUserRegistration.setOnClickListener(view ->
         UserRegistrationDialogFragment.create(hostname, txtUsername.getText().toString(), txtPasswd.getText().toString())
         .show(getFragmentManager(), "UserRegistrationDialogFragment"));
+     **/
   }
 
   @Override
@@ -86,10 +89,12 @@ public class LoginFragment extends AbstractServerConfigFragment implements Login
     HashMap<String, View> viewMap = new HashMap<>();
     HashMap<String, Boolean> supportedMap = new HashMap<>();
     for (OAuthProviderInfo info : OAuthProviderInfo.LIST) {
+      RCLog.d("Info",info);
       viewMap.put(info.serviceName, rootView.findViewById(info.buttonId));
       supportedMap.put(info.serviceName, false);
     }
 
+    /**
     for (LoginServiceConfiguration authProvider : loginServiceList) {
       for (OAuthProviderInfo info : OAuthProviderInfo.LIST) {
         if (!supportedMap.get(info.serviceName)
@@ -114,11 +119,32 @@ public class LoginFragment extends AbstractServerConfigFragment implements Login
       }
     }
 
+    **/
+
+    /**
     for (OAuthProviderInfo info : OAuthProviderInfo.LIST) {
       if (!supportedMap.get(info.serviceName)) {
         viewMap.get(info.serviceName).setVisibility(View.GONE);
       }
-    }
+    }**/
+
+    supportedMap.put("fablabs", true);
+    viewMap.get("fablabs").setOnClickListener(view -> {
+      Fragment fragment = null;
+      try {
+        fragment = new FablabsOAuthFragment();
+      } catch (Exception exception) {
+        RCLog.w(exception, "failed to create new Fragment");
+      }
+      if (fragment != null) {
+        Bundle args = new Bundle();
+        args.putString("hostname", hostname);
+        fragment.setArguments(args);
+        showFragmentWithBackStack(fragment);
+      }
+    });
+    viewMap.get("fablabs").setVisibility(View.VISIBLE);
+
   }
 
   @Override

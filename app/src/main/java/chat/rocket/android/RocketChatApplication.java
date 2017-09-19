@@ -26,7 +26,8 @@ public class RocketChatApplication extends MultiDexApplication {
 
     List<ServerInfo> serverInfoList = ConnectivityManager.getInstance(this).getServerList();
     for (ServerInfo serverInfo : serverInfoList) {
-      RealmStore.put(serverInfo.getHostname());
+//      RealmStore.put(serverInfo.getHostname());
+      RealmStore.put("fabfriends.org");
     }
 
     RocketChatWidgets.initialize(this, OkHttpHelper.INSTANCE.getClientForDownloadFile(this));
